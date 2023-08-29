@@ -8,7 +8,9 @@ const code =
 
 export default function App() {
   const LocalComponent = () => <Text>From Local Component</Text>;
-  const WrappedComponent = withRemote(LocalComponent)();
+  const WrappedComponent = withRemote(LocalComponent)({
+    url: 'https://dl.dropboxusercontent.com/scl/fi/3fi3tz6etp1pkpgejl4be/data.json?dl=0&rlkey=zwfdgyv3ktxoqj4gzvzf1qzic',
+  });
 
   return (
     <View style={styles.container}>

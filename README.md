@@ -11,11 +11,11 @@ npm install react-native-remote-view
 ## How to use
 
 ```js
-withRemote(ComponentName)(componentPath, [remoteProps])
+withRemote(ComponentName)(fetchParams, [remoteProps])
 ```
 
 - `ComponentName`: **Required.** Name of component.
-- `componentPath`: **Required.** Component's path. It is used to identify component.
+- `fetchParams`: **Required.** `{ url: string; method?: string; headers?: {}; [key: string]: any; }``.
 - `remoteProps`: **Optional.** It is an object which is passed as prop to remote component and is accessibe in remote code as one of the props.
 
 Let's say, you have component called `Button` which you want to render using remote code and it is located at `Components/Button.js`.
@@ -29,7 +29,7 @@ import withRemote from '../Remote'
 
 function Button(props) {}
 
-export default withRemote(Button)('Components/Button.js', {
+export default withRemote(Button)({ url: '' }, {
   someKey: someValue,
 })
 ```
@@ -42,19 +42,6 @@ Make sure, you remove the `withRemote` from copied code. Component's code in CMS
 function Button(props) {}
 
 export default Button
-```
-
-### Step - Provide component's version
-
-In CMS, we can create multiple revisions (versions) of component and they are represented like `v1`, `v2`, and so on. By default, the latest version of component is picked while rendering. If you want to render specific version of component then add the info in `AppConfig.js` file.
-
-```js
-remote = {
-  components: {
-    // Button component should use version 2.
-    'Components/Button.js': 'v2',
-  },
-}
 ```
 
 ### Step - Provide dependencies

@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import Remote from './Remote';
+import { type FetchParams } from './types';
 import { ActivityIndicator } from 'react-native';
-
-// TODO: Refactor
 
 const withRemote =
   (LocalComponent: React.ComponentType) =>
-  (remoteProps?: {}) => {
+  (fetchParams: FetchParams, remoteProps?: {}) => {
     const LocalComponentWithRemote = React.memo(function ({ ...rest }) {
       const [code, setCode] = useState<string | undefined>(undefined);
       const [isLoading, setIsLoading] = useState(false);
 
       const fetchResponse = async () => {
-        fetch(
-          'https://dl.dropboxusercontent.com/scl/fi/3fi3tz6etp1pkpgejl4be/data.json?rlkey=zwfdgyv3ktxoqj4gzvzf1qzic&dl=0'
-        )
+        setIsLoading(true);
+        fetch(fetchParams.url, {
+          ...fetchParams,
+          method: fetchParams?.method ?? 'GET',
+          headers: fetchParams?.headers ?? {},
+        })
           .then((res) => res.text())
           .then((res) => {
             setIsLoading(false);
@@ -27,11 +29,10 @@ const withRemote =
       };
 
       useEffect(() => {
-        setIsLoading(true);
-        setTimeout(fetchResponse, 5000);
+        fetchResponse();
       }, []);
 
-      if (isLoading) {
+      if (isLoading && code === undefined) {
         return <ActivityIndicator size={'small'} />;
       }
 
